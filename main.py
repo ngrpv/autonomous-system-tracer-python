@@ -3,19 +3,6 @@ import socket
 
 import requests
 
-PRIVATE_NETWORKS = {
-    ('10.0.0.0', '10.255.255.255'),
-    ('172.16.0.0', '172.31.255.255'),
-    ('192.168.0.0', '192.168.255.255')
-}
-
-
-def is_white_ip(ip):
-    for network in PRIVATE_NETWORKS:
-        if network[0] <= ip <= network[1]:
-            return False
-    return True
-
 
 def trace(ip, hops):
     try:
@@ -28,12 +15,10 @@ def trace(ip, hops):
     port = 33434
     while ttl < hops:
         ttl += 1
-        receiver = socket.socket(socket.AF_INET, socket.SOCK_RAW,
-                                 socket.IPPROTO_ICMP)
+        receiver = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
         receiver.bind(('', port))
-        receiver.settimeout(1)
-        sender = socket.socket(socket.AF_INET, socket.SOCK_DGRAM,
-                               socket.getprotobyname('udp'))
+        receiver.settimeout(2)
+        sender = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.getprotobyname('udp'))
         sender.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
         sender.sendto(b'', (dest, port))
         answer_from = None
@@ -41,7 +26,6 @@ def trace(ip, hops):
             _, answer_from = receiver.recvfrom(65536)
         except socket.error:
             pass
-        # log('socket error ttl={}'.format(ttl))
         finally:
             receiver.close()
             sender.close()
@@ -67,4 +51,4 @@ def log(str):
 
 print('ip or domain:')
 ip = input()
-trace(ip, 35)
+trace(ip, 45)
