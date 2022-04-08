@@ -1,6 +1,7 @@
 # Autonomous System Tracer (+country, provider)
 ## Usage:
 1. Linux(on Windows may be troubles with ttl):
+    > You should use "sudo"
    ```
    [user@user]$ sudo python main.py
     ip or domain:
