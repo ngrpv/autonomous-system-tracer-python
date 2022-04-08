@@ -45,7 +45,7 @@ def get_info(ip):
     try:
         info = json.loads(
             requests.get("http://ipinfo.io/{0}/json".format(ip)).content)
-        return '{:<30}{:<5}'.format(info.get('org', '__LOCAL__'), info.get('country', ''))
+        return '{:<30}{:<5}'.format(info.get('org', ''), info.get('country', ''))
     except Exception:
         return "*****"
 
